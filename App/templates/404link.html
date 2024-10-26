@@ -1,0 +1,480 @@
+{% extends "dashboard_layout.html" %} {% block body %}
+
+<main
+    class="col-md-9 ms-sm-auto col-lg-10 px-md-4 d-flex flex-column"
+    style="min-height: 100vh; width: 100%; padding-top: 4rem; overflow-y: scroll; margin-top: 1rem; display: flex; justify-content: center; align-items: center;"
+>
+
+<h1>Error 404... Link not found</h1>
+<h1 class="display-6">I think you've got the wrong URL</h1>
+<p class='text-muted'>Check the link's address for any typo.</p>
+
+</main>
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+:root {
+  --black: #101720;
+  --fade: #715c5c;
+}
+
+.display-none {
+  display: none;
+}
+
+body {
+  width: 100vw;
+  min-height: 100vh;
+}
+
+nav {
+  width: 100%;
+  height: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30px 15px;
+  position: fixed;
+  top: 0px;
+  backdrop-filter: blur(8px);
+}
+
+@keyframes alert {
+  0% {
+    transform: translate(-50%, -100%);
+    visibility: visible;
+  }
+  10% {
+    transform: translate(-50%, 0);
+  }
+  40% {
+    transform: translate(-50%, 0);
+  }
+  90% {
+    transform: translate(-50%, -200%);
+  }
+  100% {
+    transform: translate(-50%, -330%);
+    visibility: hidden;
+  }
+}
+
+.alert {
+  position: fixed;
+  background-color: black;
+  color: wheat;
+  visibility: hidden;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  width: 80vw;
+  transform: translateX(-50%);
+  margin: 0 50%;
+  right: auto;
+  padding: 20px 10px;
+  border-radius: 5px;
+  margin-bottom: 4px;
+  animation-name: alert;
+  animation-duration: 2.5s;
+  animation-delay: 0s;
+  animation-fill-mode: forwards;
+}
+
+.logo {
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande',
+    'Lucida Sans', Arial, sans-serif;
+  color: black;
+}
+
+.nav-items {
+  display: flex;
+  gap: 10px;
+  justify-content: space-evenly;
+  align-items: center;
+  padding-right: 10px;
+}
+
+.nav-header {
+  width: 100%;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  padding: 30px 15px;
+}
+
+.nav-items .cart {
+  position: relative;
+  padding: 7px 16px;
+}
+
+.nav-items .cart .badge {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  padding: 5px 10px;
+  border-radius: 50%;
+  background-color: red;
+  color: white;
+}
+
+.search {
+  width: 100%;
+  height: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 0;
+}
+
+.search input {
+  width: 90%;
+  height: 100%;
+  border: none;
+  background-color: blanchedalmond;
+  padding: 20px;
+}
+
+.search .search_box {
+  width: 90%;
+  max-height: 50vh;
+  background-color: white;
+  border: 2px solid blanchedalmond;
+  padding: 1rem 2rem 1rem 2rem;
+  z-index: 50;
+  box-shadow: 3px 5px 20px gray;
+  /* Adding space below for clean layout */
+  /* margin-bottom: 2rem; */
+}
+
+.books {
+  width: 100%;
+  padding: 0px;
+  display: grid;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.book-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.book-container img {
+  width: 170px;
+  height: 170px;
+  object-fit: cover;
+}
+
+.book-title {
+  padding: 5px 0;
+  color: var(--fade);
+}
+
+button {
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.book-btns {
+  display: flex;
+  justify-content: stretch;
+  align-items: center;
+  gap: 15px;
+}
+.book-btn {
+  flex: 1;
+  height: 30px;
+}
+
+.pagination {
+  padding: 42px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.pagination button {
+  width: 100px;
+  height: 40px;
+}
+
+footer {
+  background-color: blanchedalmond;
+  padding: 40px 10px;
+}
+
+footer p {
+  color: var(--fade);
+  padding-bottom: 10px;
+  line-height: 30px;
+}
+
+a {
+  text-decoration: none;
+  color: var(--fade);
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.br-5 {
+  border-radius: 5px;
+}
+
+.dash-cards {
+  display: flex;
+  flex-wrap: wrap;
+}
+.dash-card {
+  background-color: blanchedalmond;
+  width: 45vw;
+  border-radius: 10px;
+  margin: 8px;
+  padding: 20px;
+}
+
+.login-btn {
+  color: white;
+  background-color: black;
+  width: 80vw;
+  margin: 0 auto;
+  padding: 5px 20px;
+  text-align: center;
+  border-radius: 5px;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  width: 80vw;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.login-form input {
+  border: 1px solid black;
+  height: 40px;
+  padding: 20px;
+}
+
+.loader {
+  position: relative;
+  overflow: hidden;
+}
+
+.loader:after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 24px;
+  height: 24px;
+  margin: -12px 0 0 -12px;
+  border: 4px solid #fff;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  transform-origin: 50% 50%;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% extends 'base.html' %}
+
+{% block content %}
+<form class="search" action="/" method="POST">
+  <input
+    class="br-5"
+    type="search"
+    name="search"
+    id="search"
+    placeholder="Search Books"
+  />
+  
+  {% if results %}
+    <div class="search_box">
+      {% include 'search_query.html' %}
+    </div>
+  {% endif %}
+</form>
+
+<section class="books">
+  {% for book in books %}
+    {% include '_book.html' %}
+  {% endfor %}
+</section>
+<section class="pagination">
+  {% if prev_url %}
+    <button><a href="{{ prev_url }}">Previous Page</a></button>
+  {% endif %}
+  {% if next_url %}
+    <button><a href="{{ next_url }}">Next Page</a></button>
+  {% endif %}
+</section>
+{% endblock %}
+
+{% block footer %}
+  {% include '_footer.html' %}
+{% endblock footer %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+from uuid import uuid4
+
+from flask import (
+    Blueprint,
+    render_template,
+    current_app,
+    session,
+    request,
+    url_for,
+    abort,
+)
+import sqlalchemy as sa
+
+from .books import books_bp
+from .cart import cart_bp
+from .order import orders_bp
+from .payment import payment_bp
+from .location import location_bp
+from app.models import Book
+from app import db
+
+client_bp = Blueprint("client", __name__)
+
+
+@client_bp.route("/", strict_slashes=False, methods=["GET", "POST"])
+@client_bp.route("/home")
+def index():
+    page = request.args.get("page", 1, type=int)
+    query = sa.select(Book)
+    books = db.paginate(
+        query, page=page, per_page=current_app.config["BOOKS_PER_PAGE"], error_out=False
+    )
+    next_url = url_for("client.index", page=books.next_num) if books.has_next else None
+    prev_url = url_for("client.index", page=books.prev_num) if books.has_prev else None
+
+    search_query = request.form.get('search')
+    search_results = Book.query.filter(Book.title.ilike(f'%{search_query}%')).all()
+    
+    print(session["user_id"])
+    return render_template(
+        "index.html", books=books.items, next_url=next_url, prev_url=prev_url, results=search_results
+    )
+
+client_bp.register_blueprint(books_bp)
+client_bp.register_blueprint(cart_bp)
+client_bp.register_blueprint(orders_bp)
+client_bp.register_blueprint(payment_bp)
+client_bp.register_blueprint(location_bp)
+
+
+@client_bp.before_request
+def before_request():
+    if not session.get("user_id"):
+        print("no session")
+        session["user_id"] = str(uuid4())
+    customer_id = session.get("user_id")
+    print(customer_id)
+
+
+@client_bp.errorhandler(404)
+def not_found(e):
+    return render_template("error.html", code=404)
+
+
+@client_bp.errorhandler(500)
+def internal_error(e):
+    return render_template("error.html", code=500)

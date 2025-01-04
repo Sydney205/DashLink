@@ -1,9 +1,8 @@
-# DashLink
+# DashLink: URL Shortener
 
 <br>
 <img src="./dashlink/static/img/screenshot.PNG" width="">
 
-A URL Shortener website
 
 ## App's Features
 

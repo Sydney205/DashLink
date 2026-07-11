@@ -1,0 +1,27 @@
+kind = "web"
+previewPath = "/"
+title = "DashLink"
+version = "1.0.0"
+id = "artifacts/dashlink"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 20317
+
+[services.development]
+run = "pnpm --filter @workspace/dashlink run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/dashlink", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/dashlink/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "20317"
+BASE_PATH = "/"

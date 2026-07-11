@@ -1,0 +1,381 @@
+openapi: 3.1.0
+info:
+  # Do not change the title, if the title changes, the import paths will be broken
+  title: Api
+  version: 0.1.0
+  description: API specification
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: auth
+    description: Authentication operations (backed by Supabase Auth)
+  - name: links
+    description: Short link management
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      description: Returns server health status
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+
+  /auth/signup:
+    post:
+      operationId: signup
+      tags: [auth]
+      summary: Create a new account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SignupInput"
+      responses:
+        "201":
+          description: Account created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthSession"
+        "400":
+          description: Invalid input or email already in use
+
+  /auth/login:
+    post:
+      operationId: login
+      tags: [auth]
+      summary: Sign in with email and password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginInput"
+      responses:
+        "200":
+          description: Signed in
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthSession"
+        "401":
+          description: Invalid credentials
+
+  /auth/me:
+    get:
+      operationId: getCurrentUser
+      tags: [auth]
+      summary: Get the currently authenticated user
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Current user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthUser"
+        "401":
+          description: Not authenticated
+
+  /links:
+    get:
+      operationId: listLinks
+      tags: [links]
+      summary: List the current user's short links
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: List of links
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Link"
+        "401":
+          description: Not authenticated
+    post:
+      operationId: createLink
+      tags: [links]
+      summary: Create a new short link
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LinkInput"
+      responses:
+        "201":
+          description: Link created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Link"
+        "400":
+          description: Invalid input or short id already taken
+        "401":
+          description: Not authenticated
+
+  /links/summary:
+    get:
+      operationId: getLinkSummary
+      tags: [links]
+      summary: Aggregate stats for the current user's links
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Summary stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LinkSummary"
+        "401":
+          description: Not authenticated
+
+  /links/{shortId}:
+    get:
+      operationId: getLink
+      tags: [links]
+      summary: Get a single link owned by the current user
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/ShortIdParam"
+      responses:
+        "200":
+          description: Link
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Link"
+        "401":
+          description: Not authenticated
+        "404":
+          description: Link not found
+    patch:
+      operationId: updateLink
+      tags: [links]
+      summary: Update a link owned by the current user
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/ShortIdParam"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LinkUpdate"
+      responses:
+        "200":
+          description: Updated link
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Link"
+        "400":
+          description: Invalid input or short id already taken
+        "401":
+          description: Not authenticated
+        "404":
+          description: Link not found
+    delete:
+      operationId: deleteLink
+      tags: [links]
+      summary: Delete a link owned by the current user
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/ShortIdParam"
+      responses:
+        "204":
+          description: Deleted
+        "401":
+          description: Not authenticated
+        "404":
+          description: Link not found
+
+  /resolve/{shortId}:
+    get:
+      operationId: resolveLink
+      tags: [links]
+      summary: Resolve a short id to its destination URL (public, records a click)
+      parameters:
+        - $ref: "#/components/parameters/ShortIdParam"
+      responses:
+        "200":
+          description: Resolved link
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResolvedLink"
+        "404":
+          description: Short link not found
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    ShortIdParam:
+      name: shortId
+      in: path
+      required: true
+      schema:
+        type: string
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+
+    AuthUser:
+      type: object
+      required: [id, email, name]
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+        name:
+          type: ["string", "null"]
+
+    AuthSession:
+      type: object
+      required: [accessToken, user]
+      properties:
+        accessToken:
+          type: string
+        user:
+          $ref: "#/components/schemas/AuthUser"
+
+    SignupInput:
+      type: object
+      required: [email, password, name]
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+          minLength: 6
+        name:
+          type: string
+          minLength: 1
+
+    LoginInput:
+      type: object
+      required: [email, password]
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+
+    Link:
+      type: object
+      required:
+        [
+          id,
+          shortId,
+          shortUrl,
+          originalUrl,
+          title,
+          description,
+          clicks,
+          createdAt,
+          updatedAt,
+        ]
+      properties:
+        id:
+          type: integer
+        shortId:
+          type: string
+        shortUrl:
+          type: string
+        originalUrl:
+          type: string
+        title:
+          type: ["string", "null"]
+        description:
+          type: ["string", "null"]
+        clicks:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    LinkInput:
+      type: object
+      required: [originalUrl]
+      properties:
+        originalUrl:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        shortId:
+          type: string
+          minLength: 3
+          maxLength: 32
+          pattern: "^[a-zA-Z0-9_-]+$"
+
+    LinkUpdate:
+      type: object
+      properties:
+        originalUrl:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        shortId:
+          type: string
+          minLength: 3
+          maxLength: 32
+          pattern: "^[a-zA-Z0-9_-]+$"
+
+    LinkSummary:
+      type: object
+      required: [totalLinks, totalClicks, mostClicked]
+      properties:
+        totalLinks:
+          type: integer
+        totalClicks:
+          type: integer
+        mostClicked:
+          oneOf:
+            - $ref: "#/components/schemas/Link"
+            - type: "null"
+
+    ResolvedLink:
+      type: object
+      required: [originalUrl]
+      properties:
+        originalUrl:
+          type: string
+        title:
+          type: ["string", "null"]
